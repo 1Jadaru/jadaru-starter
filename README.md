@@ -231,16 +231,29 @@ Then run BMAD workflows to generate planning artifacts:
 ### 4. Implementation (orchestrate CC through BMAD)
 Follow the Phase 4 cycle above for each story.
 
-### 5. Pre-Deploy Checklist (UAT)
+### 5. Pre-Deploy Checklist
 - [ ] `npm run build` passes (no errors)
 - [ ] `npm run test` passes (all green)
 - [ ] `npm run dev` renders locally
 - [ ] Middleware size < 1MB (check build output)
-- [ ] Test key flows manually (landing, auth, main features)
 - [ ] All env vars documented in `.env.example`
 - [ ] Review any CC-generated content for hallucinations
 
-### 6. Deploy to Vercel
+### 6. Post-Deploy UAT (Agent does this before human UAT)
+**Do full iterative UAT before asking the human to test.**
+
+- [ ] Create test account on live site
+- [ ] Registration works (valid + invalid inputs)
+- [ ] Login works (valid + invalid credentials)  
+- [ ] Dashboard loads after login
+- [ ] CRUD operations for each main entity
+- [ ] Error messages display correctly
+- [ ] Page titles and branding correct
+- [ ] No console errors in browser
+- [ ] Fix issues iteratively, redeploy, verify
+- [ ] Only escalate blockers or design questions
+
+### 7. Deploy to Vercel
 ```bash
 vercel link
 vercel --prod
