@@ -111,43 +111,109 @@ npx shadcn@latest add input
 
 Components will be added to `src/components/ui/`.
 
-## New Project Checklist (BMAD Workflow)
+## BMAD Method (V6)
+
+This template includes [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD/) V6 — an AI-driven agile development framework with specialized agent personas.
+
+### Orchestrating Claude Code with BMAD
+
+When managing CC sessions, invoke BMAD workflows by telling CC which slash command to run:
+
+**Planning Phase (Phases 1-3):**
+```
+"Run /bmad-bmm-create-brief to create the product brief"
+"Run /bmad-bmm-prd to create the PRD"
+"Run /bmad-bmm-create-architecture for the technical design"
+"Run /bmad-bmm-create-epics-and-stories to break down the work"
+```
+
+**Implementation Phase (Phase 4) — repeat per story:**
+```
+1. "Run /bmad-bmm-sprint-planning to initialize the sprint"
+2. "Run /bmad-bmm-create-story to prepare the next story"
+3. "Run /bmad-bmm-dev-story to implement"
+4. "Run /bmad-bmm-code-review to review" (adversarial — finds 3-10 issues minimum)
+
+→ If issues: "Run /bmad-bmm-dev-story to fix the issues"
+→ If clean: "Run /bmad-bmm-create-story for the next story"
+→ Epic done: "Run /bmad-bmm-retrospective" then next epic
+```
+
+**Quick Flow (simple tasks):**
+```
+"Run /bmad-bmm-quick-spec for a tech spec"
+"Run /bmad-bmm-quick-dev to implement"
+```
+
+### BMAD Agents
+
+| Agent | Name | Specialty |
+|-------|------|-----------|
+| 📊 Analyst | Mary | Product briefs, research |
+| 📋 PM | John | PRDs, epics & stories |
+| 🏗️ Architect | Winston | Technical architecture |
+| 🎨 UX Designer | Sally | UX design, wireframes |
+| 🏃 Scrum Master | Bob | Sprint management |
+| 💻 Developer | Amelia | Implementation & code review |
+| 🚀 Quick Flow | Barry | Fast-track simple tasks |
+
+### Output Locations
+
+| Artifact | Location |
+|----------|----------|
+| Planning docs | `_bmad-output/planning-artifacts/` |
+| Story files | `_bmad-output/implementation-artifacts/` |
+| Sprint status | `_bmad-output/implementation-artifacts/sprint-status.yaml` |
+
+---
+
+## New Project Setup
 
 When starting a new project from this template:
 
-1. **Clone and configure**
-   - [ ] Use this template / clone the repo
-   - [ ] Update `package.json` name, description, and version
-   - [ ] Copy `.env.example` to `.env` and fill in values
-   - [ ] Generate a new `NEXTAUTH_SECRET` (`openssl rand -base64 32`)
+### 1. Clone and Configure
+```bash
+cp -r ~/projects/jadaru-starter ~/projects/my-new-app
+cd ~/projects/my-new-app
+```
 
-2. **Database setup**
-   - [ ] Create a PostgreSQL database
-   - [ ] Update `DATABASE_URL` in `.env`
-   - [ ] Run `npx prisma migrate dev --name init`
-   - [ ] Extend the Prisma schema for your domain models
+- [ ] Update `package.json` name and version
+- [ ] Set git author for Vercel: `git config user.email "your-vercel-email@example.com"`
+- [ ] Create GitHub repo: `gh repo create username/my-new-app --private --source=. --push`
 
-3. **Authentication**
-   - [ ] Configure OAuth providers (if needed)
-   - [ ] Customize the sign-in page
-   - [ ] Set up user registration flow
+### 2. Environment Setup
+- [ ] Copy `.env.example` to `.env`
+- [ ] Generate `NEXTAUTH_SECRET`: `openssl rand -base64 32`
+- [ ] Set `DATABASE_URL` (or add Neon via Vercel later)
 
-4. **Development workflow**
-   - [ ] Write tests first (TDD)
-   - [ ] Use conventional commit messages
-   - [ ] Run `npm run type-check` before committing
-   - [ ] Create feature branches, PR into `main`
+### 3. BMAD Planning (in Claude Code)
+```bash
+cd ~/projects/my-new-app
+claude --dangerously-skip-permissions
+```
+Then run BMAD workflows to generate planning artifacts:
+1. `/bmad-bmm-create-brief` → product-brief.md
+2. `/bmad-bmm-prd` → prd.md  
+3. `/bmad-bmm-create-architecture` → architecture.md
+4. `/bmad-bmm-create-epics-and-stories` → epics.md
 
-5. **BMAD method**
-   - [ ] Check `bmad-method/` for workflow templates and agents
-   - [ ] Use BMAD personas for structured product development
-   - [ ] Follow the PRD → architecture → stories → implementation flow
+### 4. Implementation (orchestrate CC through BMAD)
+Follow the Phase 4 cycle above for each story.
 
-6. **Deployment**
-   - [ ] Set up hosting (Render, Vercel, etc.)
-   - [ ] Configure production environment variables
-   - [ ] Set up CI/CD (GitHub Actions included)
-   - [ ] Configure custom domain
+### 5. Pre-Deploy Checklist
+- [ ] `npm run build` passes
+- [ ] `npm run test` passes
+- [ ] `npm run dev` renders locally
+- [ ] All env vars documented in `.env.example`
+
+### 6. Deploy to Vercel
+```bash
+vercel link
+vercel --prod
+```
+- Add Neon Postgres via Vercel Storage tab
+- Set `NEXTAUTH_SECRET` in environment variables
+- Push schema: `vercel env pull .env.local && npx prisma db push`
 
 ## Vercel Deployment
 

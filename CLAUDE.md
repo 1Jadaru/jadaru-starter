@@ -355,19 +355,71 @@ When working in WSL or cross-platform environments:
 
 ---
 
-## 📋 BMAD Method
+## 📋 BMAD Method (V6)
 
-This project includes the [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD/) for AI-driven agile development. BMAD workflows are available via Claude Code slash commands.
+This project includes the [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD/) V6 for AI-driven agile development. BMAD uses specialized agent personas to guide you through structured workflows.
 
-**Key workflows:**
-- `/bmad-help` — See available workflows and next steps
-- `/bmad-bmm-create-product-brief` — Create a product brief
-- `/bmad-bmm-create-prd` — Create a PRD from the brief
-- `/bmad-bmm-create-architecture` — Design system architecture
-- `/bmad-bmm-create-epics-and-stories` — Break work into stories
-- `/bmad-bmm-dev-story` — Implement a story with TDD
-- `/bmad-bmm-quick-spec` — Quick spec for simple tasks
-- `/bmad-bmm-quick-dev` — Quick dev without heavy planning
+### BMAD Agents
+
+| Agent | Name | Role |
+|-------|------|------|
+| 📊 Analyst | Mary | Business analysis, product briefs, research |
+| 📋 PM | John | PRD creation, epics & stories |
+| 🏗️ Architect | Winston | Technical architecture decisions |
+| 🎨 UX Designer | Sally | UX design, wireframes, diagrams |
+| 🏃 Scrum Master | Bob | Sprint planning, story prep, retrospectives |
+| 💻 Developer | Amelia | Implementation, TDD, code review |
+| 🧪 Test Architect | Murat | Test design (pre-implementation) |
+| 🚀 Quick Flow | Barry | Fast-track for simple tasks |
+
+### Workflow Phases
+
+**Phase 1-3: Planning** (Use these slash commands in sequence)
+
+| Phase | Command | Agent | Output |
+|-------|---------|-------|--------|
+| 1. Analysis | `/bmad-bmm-create-brief` | Mary | `product-brief.md` |
+| 2. Planning | `/bmad-bmm-prd` | John | `prd.md` |
+| 2. Planning | `/bmad-bmm-create-ux-design` | Sally | `ux-design.md` (if UI) |
+| 3. Solutioning | `/bmad-bmm-create-architecture` | Winston | `architecture.md` |
+| 3. Solutioning | `/bmad-bmm-create-epics-and-stories` | John | `epics.md` |
+| 3. Solutioning | `/bmad-bmm-check-implementation-readiness` | Winston | Readiness report |
+
+**Phase 4: Implementation** (Repeat this cycle for each story)
+
+| Step | Command | Agent | Purpose |
+|------|---------|-------|---------|
+| 1 | `/bmad-bmm-sprint-planning` | Bob | Initialize sprint tracking |
+| 2 | `/bmad-bmm-create-story` | Bob | Prepare next story with full context |
+| 3 | `/bmad-bmm-dev-story` | Amelia | Implement the story (TDD) |
+| 4 | `/bmad-bmm-code-review` | Amelia | **Adversarial** self-review |
+
+**Code Review is adversarial by design:**
+> "Find 3-10 specific issues in every review minimum - no lazy 'looks good' reviews"
+
+- ❌ Issues found → Back to `/bmad-bmm-dev-story` for fixes
+- ✅ All issues resolved → `/bmad-bmm-create-story` for next story
+- 🏁 Epic complete → `/bmad-bmm-retrospective` then next epic
+
+### Quick Flow (Simple Tasks)
+
+For bug fixes, small features, or clear-scope work without full planning:
+
+1. `/bmad-bmm-quick-spec` — Analyzes codebase, produces tech-spec with stories
+2. `/bmad-bmm-quick-dev` — Implements the spec
+3. `/bmad-bmm-code-review` — Validates quality
+
+### Utility Commands
+
+- `/bmad-help` — Get guidance on what to do next (works with context, e.g., `/bmad-help I just finished architecture`)
+- `/bmad-bmm-sprint-status` — Check current sprint progress
+- `/bmad-bmm-correct-course` — Handle significant scope changes
+
+### Output Locations
+
+- Planning artifacts: `_bmad-output/planning-artifacts/`
+- Implementation artifacts: `_bmad-output/implementation-artifacts/`
+- Sprint status: `_bmad-output/implementation-artifacts/sprint-status.yaml`
 
 ---
 
