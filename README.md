@@ -149,6 +149,32 @@ When starting a new project from this template:
    - [ ] Set up CI/CD (GitHub Actions included)
    - [ ] Configure custom domain
 
+## Vercel Deployment
+
+When deploying to Vercel:
+
+1. **Git author must match Vercel team**
+   ```bash
+   git config user.email "your-vercel-email@example.com"
+   ```
+
+2. **Add environment variables in Vercel dashboard:**
+   - `DATABASE_URL` — From Neon Postgres (add via Storage tab)
+   - `NEXTAUTH_SECRET` — Generate with `openssl rand -base64 32`
+   - `NEXTAUTH_URL` — Your production URL
+
+3. **Push schema to database:**
+   ```bash
+   # Pull Vercel env vars locally
+   vercel env pull .env.local
+   # Push Prisma schema
+   npx prisma db push
+   ```
+
+4. **Common issues:**
+   - Edge function > 1MB: This template uses lightweight JWT middleware to avoid this
+   - useSearchParams errors: Wrap in Suspense (Next.js 15 requirement)
+
 ## Conventional Commits
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/):
