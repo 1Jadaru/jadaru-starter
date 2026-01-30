@@ -423,15 +423,24 @@ This project includes the [BMAD Method](https://github.com/bmad-code-org/BMAD-ME
 | 2. Planning | `/bmad-bmm-prd` | John | `prd.md` |
 | 2. Planning | `/bmad-bmm-create-ux-design` | Sally | `ux-design.md` (if UI) |
 | 3. Solutioning | `/bmad-bmm-create-architecture` | Winston | `architecture.md` |
+| 3. Solutioning | **Schema Generation** (manual step) | — | `prisma/schema.prisma` |
 | 3. Solutioning | `/bmad-bmm-create-epics-and-stories` | John | `epics.md` |
 | 3. Solutioning | `/bmad-bmm-check-implementation-readiness` | Winston | Readiness report |
 
-**⚠️ Schema Planning (During Architecture):**
-The database schema MUST be fully designed during `/bmad-bmm-create-architecture`. Include:
-- All entities and relationships from the PRD
-- Soft delete fields (`deletedAt`) — never use CASCADE deletes
-- Audit fields (`createdAt`, `updatedAt`)
-- Adding tables/columns mid-project risks data loss
+**⚠️ Schema Generation Step (After Architecture, Before Epics):**
+After architecture is complete, generate the full Prisma schema before creating epics:
+
+```
+"Based on the architecture document, generate the complete prisma/schema.prisma file.
+Include:
+- All entities and relationships from the PRD and architecture
+- Soft delete fields (deletedAt DateTime?) on all main entities
+- Audit fields (createdAt, updatedAt) on all entities
+- Use onDelete: Restrict or SetNull — NEVER use Cascade
+- Include the NextAuth models (User, Account, Session, VerificationToken)"
+```
+
+This ensures the schema is locked before implementation begins. Adding tables/columns mid-project risks data loss.
 
 **Phase 4: Implementation** (Repeat this cycle for each story)
 

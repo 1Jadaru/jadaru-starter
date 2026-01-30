@@ -124,10 +124,22 @@ When managing CC sessions, invoke BMAD workflows by telling CC which slash comma
 "Run /bmad-bmm-create-brief to create the product brief"
 "Run /bmad-bmm-prd to create the PRD"
 "Run /bmad-bmm-create-architecture for the technical design"
+```
+
+**Schema Generation (after architecture, before epics):**
+```
+"Based on the architecture, generate the complete prisma/schema.prisma file.
+Include all entities from the PRD, soft delete fields (deletedAt), audit fields
+(createdAt, updatedAt), and use onDelete: Restrict or SetNull — never Cascade.
+Include the NextAuth models."
+```
+
+Then continue:
+```
 "Run /bmad-bmm-create-epics-and-stories to break down the work"
 ```
 
-> ⚠️ **Schema Planning:** During architecture, ensure the **complete database schema** is designed upfront. Adding tables/columns mid-project risks data loss. Never use CASCADE deletes.
+> ⚠️ **Why schema first?** Adding tables/columns mid-project risks data loss. Lock the schema before implementation.
 
 **Implementation Phase (Phase 4) — repeat per story:**
 ```
@@ -197,7 +209,8 @@ Then run BMAD workflows to generate planning artifacts:
 1. `/bmad-bmm-create-brief` → product-brief.md
 2. `/bmad-bmm-prd` → prd.md  
 3. `/bmad-bmm-create-architecture` → architecture.md
-4. `/bmad-bmm-create-epics-and-stories` → epics.md
+4. **Generate schema** → prisma/schema.prisma (see prompt above)
+5. `/bmad-bmm-create-epics-and-stories` → epics.md
 
 ### 4. Implementation (orchestrate CC through BMAD)
 Follow the Phase 4 cycle above for each story.
