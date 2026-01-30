@@ -2,156 +2,85 @@
 
 This project includes BMAD V6 (Break Method Agile Development) for structured AI-assisted development.
 
-## Why BMAD?
+> 📖 **Official BMAD documentation is in `_bmad/bmm/`** — this file is a quick-start reference.
 
-BMAD provides:
-- Structured SDLC with clear phases
-- Agent personas for different roles (PO, Architect, Dev, QA)
-- Sprint tracking and story management
-- Quality gates and validation workflows
+## Quick Start
 
-## Directory Structure
+### 1. Understand the Phases
+
+BMAD follows a structured SDLC. See `_bmad/bmm/workflows/` for full details:
+
+| Phase | Directory | Purpose |
+|-------|-----------|---------|
+| 1 | `workflows/1-analysis/` | Research, product brief |
+| 2 | `workflows/2-plan-workflows/` | PRD, epics planning |
+| 3 | `workflows/3-solutioning/` | Architecture, technical design |
+| 4 | `workflows/4-implementation/` | Sprint planning, stories, dev, review |
+| — | `workflows/bmad-quick-flow/` | Fast track for simple tasks |
+
+### 2. Key Implementation Workflows
+
+For Phase 4 (where most coding happens), see `_bmad/bmm/workflows/4-implementation/`:
+
+| Workflow | Docs Location | CC Command |
+|----------|---------------|------------|
+| Sprint Planning | `sprint-planning/instructions.md` | `/bmad-bmm-sprint-planning` |
+| Create Story | `create-story/instructions.md` | `/bmad-bmm-create-story` |
+| Dev Story | `dev-story/instructions.md` | `/bmad-bmm-dev-story` |
+| Code Review | `code-review/instructions.md` | `/bmad-bmm-code-review` |
+| Retrospective | `retrospective/instructions.md` | `/bmad-bmm-retrospective` |
+
+### 3. Agent Personas
+
+BMAD agents are defined in `_bmad/bmm/agents/`:
+
+| Agent | File | Specialty |
+|-------|------|-----------|
+| Analyst | `analyst.md` | Research, product briefs |
+| PM | `pm.md` | PRDs, epics & stories |
+| Architect | `architect.md` | Technical architecture |
+| UX Designer | `ux-designer.md` | UX design, wireframes |
+| Scrum Master | `sm.md` | Sprint management |
+| Developer | `dev.md` | Implementation & code review |
+| Quick Flow | `quick-flow-solo-dev.md` | Fast-track simple tasks |
+
+### 4. Output Locations
+
+| Artifact | Location |
+|----------|----------|
+| Planning docs | `_bmad-output/planning-artifacts/` |
+| Story files | `_bmad-output/implementation-artifacts/` |
+| Sprint status | `_bmad-output/implementation-artifacts/sprint-status.yaml` |
+
+## Critical: Workflow Order
+
+⚠️ **Always run `/bmad-bmm-sprint-planning` BEFORE developing stories.**
+
+BMAD agents expect `sprint-status.yaml` to exist. The workflow is:
 
 ```
-_bmad/                          # BMAD methodology core
-├── _config/                    # Configuration files
-├── bmm/                        # BMAD Method workflows
-│   └── workflows/              # Workflow definitions
-└── core/                       # Core agent definitions
-
-_bmad-output/                   # Project artifacts (your work goes here)
-├── planning-artifacts/         # PRD, architecture, epics
-│   ├── prd.md
-│   ├── architecture.md
-│   └── epics.md
-└── implementation-artifacts/   # Stories ready for development
-    └── sprint-status.yaml      # Sprint tracking (created by BMAD)
+1. /bmad-bmm-sprint-planning  → Creates sprint-status.yaml
+2. /bmad-bmm-create-story     → Creates story file in implementation-artifacts/
+3. /bmad-bmm-dev-story        → Implements the story (TDD)
+4. /bmad-bmm-code-review      → Reviews implementation
+5. Repeat 2-4 for each story
+6. /bmad-bmm-retrospective    → After epic completes
 ```
 
-## Getting Started with BMAD
+## Configuration
 
-### Phase 1: Project Planning
+- **Module config:** `_bmad/bmm/config.yaml`
+- **Command help:** `_bmad/bmm/module-help.csv`
+- **Templates:** `_bmad/bmm/data/`
 
-Before writing any code, create planning artifacts:
+## Learn More
 
-1. **Start Claude Code** in your project directory
-2. **Run planning workflow:**
-   ```
-   /bmad-bmm-analyst.agent
-   ```
-3. Create these artifacts in `_bmad-output/planning-artifacts/`:
-   - `product-brief.md` — Vision, users, scope
-   - `prd.md` — Requirements, features, constraints
-   - `architecture.md` — Tech decisions, structure
-   - `epics.md` — Features broken into stories
-
-### Phase 2: Sprint Planning
-
-Initialize sprint tracking BEFORE developing stories:
-
-1. **Run sprint planning:**
-   ```
-   /bmad-bmm-sprint-planning
-   ```
-2. This creates `sprint-status.yaml` to track story progress
-3. Organizes stories into sprints with priorities
-
-### Phase 3: Story Development
-
-Develop stories one at a time:
-
-1. **Create a story from epics:**
-   ```
-   /bmad-bmm-create-story
-   ```
-   - This generates a full story file in `implementation-artifacts/`
-   - Includes acceptance criteria, tasks, test requirements
-
-2. **Implement the story:**
-   ```
-   /bmad-bmm-dev-story
-   ```
-   - BMAD finds the next ready story automatically
-   - Implements tasks, writes tests, validates
-
-3. **Repeat** for each story in the sprint
-
-### Phase 4: Quality & Review
-
-After implementation:
-
-1. **Run QA validation:**
-   ```
-   /bmad-bmm-testarch-test-design
-   ```
-
-2. **Check sprint status:**
-   ```
-   /bmad-bmm-sprint-status
-   ```
-
-## Key BMAD Commands (Claude Code)
-
-| Command | Purpose |
-|---------|---------|
-| `/bmad-bmm-sprint-planning` | Initialize/manage sprint tracking |
-| `/bmad-bmm-create-story` | Create story from epics |
-| `/bmad-bmm-dev-story` | Implement next ready story |
-| `/bmad-bmm-quick-dev` | Flexible dev (tech-specs or direct) |
-| `/bmad-bmm-dev.agent` | Full dev agent persona |
-| `/bmad-bmm-analyst.agent` | Planning/analysis agent |
-| `/bmad-bmm-sm.agent` | Scrum master agent |
-| `/bmad-bmm-sprint-status` | Check sprint progress |
-| `/bmad-bmm-correct-course` | Adjust when things go off track |
-
-## BMAD vs Direct Prompting
-
-**Use BMAD when:**
-- Starting a new project from scratch
-- You want structured, repeatable process
-- Multiple sprints with tracked progress
-- You value ceremony and documentation
-
-**Use direct prompting when:**
-- Retrofitting existing codebase
-- Quick fixes or one-off features
-- Project is already mid-flight without BMAD setup
-
-## Example: Starting a New Project
+For detailed workflow instructions, read the `instructions.md` file in each workflow directory:
 
 ```bash
-# 1. Clone the starter
-git clone https://github.com/1Jadaru/jadaru-starter.git my-project
-cd my-project
-
-# 2. Start Claude Code
-claude --dangerously-skip-permissions
-
-# 3. Run analyst agent for planning
-/bmad-bmm-analyst.agent
-# -> Create PRD, architecture, epics in _bmad-output/planning-artifacts/
-
-# 4. Initialize sprint tracking
-/bmad-bmm-sprint-planning
-# -> Creates sprint-status.yaml, organizes stories
-
-# 5. Create first story
-/bmad-bmm-create-story
-# -> Generates detailed story file in implementation-artifacts/
-
-# 6. Implement the story
-/bmad-bmm-dev-story
-# -> TDD implementation with validation
-
-# 7. Repeat steps 5-6 for each story
+# Example: Read sprint planning instructions
+cat _bmad/bmm/workflows/4-implementation/sprint-planning/instructions.md
 ```
-
-## Tips
-
-- **Don't skip sprint planning** — BMAD agents expect `sprint-status.yaml` to exist
-- **Stories go in implementation-artifacts/** — Not just epics.md
-- **Let BMAD drive** — The agents know the workflow; follow their prompts
-- **Course correct early** — Use `/bmad-bmm-correct-course` if you drift
 
 ---
 
