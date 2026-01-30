@@ -161,12 +161,52 @@ If you find yourself writing implementation before tests:
 
 ## 🗄️ Database Safety
 
+### ⚠️ CRITICAL: Schema Planning First
+
+**Design your complete database schema during the Architecture phase, BEFORE implementation begins.**
+
+Adding tables or columns mid-project can cause:
+- Data loss during migrations
+- Breaking changes to existing features
+- Complex migration scripts
+
+During `/bmad-bmm-create-architecture`, ensure the schema covers:
+- All entities from the PRD
+- All relationships between entities
+- Soft delete fields (`deletedAt`) where needed
+- Audit fields (`createdAt`, `updatedAt`, `createdBy`)
+
 ### Critical Rules
 
+- **🚫 NEVER use CASCADE deletes** — always use `onDelete: Restrict` or `onDelete: SetNull`
 - **NEVER use destructive flags** (`--all`, `--force`) without explicit user confirmation
 - **ALWAYS list first** — use `--list` or `--dry-run` to preview before deleting
 - **Be surgical** — delete specific records, not entire datasets
-- **Understand foreign key constraints** — deletion order matters
+- **Soft delete by default** — add `deletedAt DateTime?` instead of hard deletes
+
+### Prisma Relation Rules
+
+```prisma
+// ✅ CORRECT — Restrict deletion if children exist
+model Parent {
+  children Child[]
+}
+model Child {
+  parent   Parent @relation(fields: [parentId], references: [id], onDelete: Restrict)
+  parentId String
+}
+
+// ✅ CORRECT — Nullify reference if parent deleted
+model Child {
+  parent   Parent? @relation(fields: [parentId], references: [id], onDelete: SetNull)
+  parentId String?
+}
+
+// 🚫 NEVER — Cascade deletes can destroy data unexpectedly
+model Child {
+  parent   Parent @relation(fields: [parentId], references: [id], onDelete: Cascade)  // FORBIDDEN
+}
+```
 
 ### Safe Workflow Example
 
@@ -183,6 +223,7 @@ npx prisma studio  # or a list command
 - All schema changes go through Prisma migrations (`npm run db:migrate`)
 - Use `npm run db:push` only in development for rapid iteration
 - Always run `npm run db:generate` after schema changes
+- **Review migration SQL** before applying — check for DROP statements
 - The Prisma client singleton is at `@/lib/db`
 
 ---
@@ -384,6 +425,13 @@ This project includes the [BMAD Method](https://github.com/bmad-code-org/BMAD-ME
 | 3. Solutioning | `/bmad-bmm-create-architecture` | Winston | `architecture.md` |
 | 3. Solutioning | `/bmad-bmm-create-epics-and-stories` | John | `epics.md` |
 | 3. Solutioning | `/bmad-bmm-check-implementation-readiness` | Winston | Readiness report |
+
+**⚠️ Schema Planning (During Architecture):**
+The database schema MUST be fully designed during `/bmad-bmm-create-architecture`. Include:
+- All entities and relationships from the PRD
+- Soft delete fields (`deletedAt`) — never use CASCADE deletes
+- Audit fields (`createdAt`, `updatedAt`)
+- Adding tables/columns mid-project risks data loss
 
 **Phase 4: Implementation** (Repeat this cycle for each story)
 

@@ -127,6 +127,8 @@ When managing CC sessions, invoke BMAD workflows by telling CC which slash comma
 "Run /bmad-bmm-create-epics-and-stories to break down the work"
 ```
 
+> ⚠️ **Schema Planning:** During architecture, ensure the **complete database schema** is designed upfront. Adding tables/columns mid-project risks data loss. Never use CASCADE deletes.
+
 **Implementation Phase (Phase 4) — repeat per story:**
 ```
 1. "Run /bmad-bmm-sprint-planning to initialize the sprint"
