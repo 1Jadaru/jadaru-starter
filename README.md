@@ -115,6 +115,10 @@ Components will be added to `src/components/ui/`.
 
 This template includes [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD/) V6 — an AI-driven agile development framework with specialized agent personas.
 
+> 📖 **See [BMAD-WORKFLOW.md](./BMAD-WORKFLOW.md) for a detailed step-by-step guide.**
+
+> ⚠️ **Important:** Always run `/bmad-bmm-sprint-planning` BEFORE developing stories. BMAD agents expect `sprint-status.yaml` to exist.
+
 ### Orchestrating Claude Code with BMAD
 
 When managing CC sessions, invoke BMAD workflows by telling CC which slash command to run:
