@@ -344,6 +344,87 @@ This ensures:
 
 ---
 
+## 🚀 Deployment (Vercel)
+
+### Pre-Deploy Checklist
+
+**Complete this checklist before every deployment:**
+
+```
+□ npm run build passes (no errors)
+□ npm run test passes (all tests green)
+□ npm run dev renders locally (smoke test)
+□ Middleware size < 1MB (check build output)
+□ git config user.email matches Vercel team
+□ .env.example has all required vars documented
+□ NEXTAUTH_SECRET generated and ready
+□ Database connection string ready (or Neon integration)
+```
+
+### Git Author for Vercel
+
+**Critical:** Your git author email must match your Vercel team membership for CLI deploys to work.
+
+```bash
+# Set per-project (recommended)
+git config user.email "your-vercel-email@example.com"
+
+# Verify before deploying
+git config user.email
+```
+
+### Deployment Flow
+
+```bash
+# 1. Run full quality checks
+npm run build && npm test
+
+# 2. Push to GitHub
+git push origin main
+
+# 3. Deploy via CLI
+vercel --prod
+
+# 4. Configure infrastructure (first deploy only)
+# - Add Postgres: Vercel dashboard → Storage → Add Neon Postgres
+# - Set env vars: NEXTAUTH_SECRET (generate: openssl rand -base64 32)
+# - DATABASE_URL is auto-added by Neon integration
+
+# 5. Push schema to production database
+vercel env pull .env.local
+DATABASE_URL="$(grep '^DATABASE_URL=' .env.local | cut -d'=' -f2- | tr -d '"')" npx prisma db push
+
+# 6. Live smoke test — verify deployed site works
+```
+
+### Middleware Size Limits
+
+Vercel Edge Functions have a **1MB size limit**. If your middleware exceeds this:
+
+- ❌ **Don't**: Import heavy libraries (full Prisma client, bcrypt, etc.)
+- ✅ **Do**: Use lightweight JWT validation in middleware
+- ✅ **Do**: Move heavy auth logic to API routes (not middleware)
+
+**Lightweight middleware pattern:**
+```typescript
+// src/middleware.ts — keep this thin!
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+
+export function middleware(request: NextRequest) {
+  // Only check for session token existence
+  const token = request.cookies.get("next-auth.session-token");
+  
+  if (!token && request.nextUrl.pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+  
+  return NextResponse.next();
+}
+```
+
+---
+
 ## 🔧 Troubleshooting
 
 | Problem | Solution |
@@ -356,6 +437,11 @@ This ensures:
 | Prisma migration drift | `npx prisma migrate reset` (⚠️ destroys data) |
 | Hydration mismatch | Check for `"use client"` on interactive components |
 | Build fails but dev works | Run `npm run type-check` — strict mode catches more |
+| Vercel deploy fails (git author) | `git config user.email "your-vercel-email"` |
+| Middleware too large (>1MB) | Move heavy imports to API routes, thin middleware |
+| `useSearchParams` hydration error | Wrap component in `<Suspense>` boundary |
+| Prisma v7 compatibility issues | Stick with Prisma v6 for now |
+| Tailwind v4 `@apply` errors | Use direct CSS properties instead of `@apply` |
 
 ### Debug Commands
 
@@ -372,6 +458,63 @@ npm install
 npm run db:generate
 npm run dev
 ```
+
+---
+
+## ⚡ Next.js 15 / React 19 Gotchas
+
+### useSearchParams Requires Suspense
+
+In Next.js 15, `useSearchParams()` must be wrapped in a Suspense boundary or the build will fail:
+
+```tsx
+// ❌ WRONG — will fail production build
+export default function LoginPage() {
+  const searchParams = useSearchParams(); // Error!
+  return <div>...</div>;
+}
+
+// ✅ CORRECT — wrap in Suspense
+function LoginContent() {
+  const searchParams = useSearchParams();
+  return <div>...</div>;
+}
+
+function LoginFallback() {
+  return <div>Loading...</div>;
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginFallback />}>
+      <LoginContent />
+    </Suspense>
+  );
+}
+```
+
+### Tailwind CSS v4 Changes
+
+Tailwind v4 has breaking changes with `@apply`:
+
+```css
+/* ❌ May fail in Tailwind v4 */
+body {
+  @apply bg-background text-foreground;
+}
+
+/* ✅ Use direct CSS with variables */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+}
+```
+
+### Server Components vs Client Components
+
+- **Default**: Components are Server Components (no `"use client"`)
+- **Add `"use client"`** only when you need: hooks, event handlers, browser APIs
+- **Don't mix**: Server Components can import Client Components, not vice versa
 
 ---
 
@@ -459,6 +602,34 @@ This ensures the schema is locked before implementation begins. Adding tables/co
 - 🏁 Epic complete → `/bmad-bmm-retrospective` then next epic
 
 **Commit after each story** — don't let work pile up uncommitted. One story = one commit.
+
+### UAT Before Deployment
+
+**Before asking for human UAT, the AI should complete its own UAT:**
+
+1. **Create test account** on live site
+2. **Test all user flows:**
+   - Registration → Login → Dashboard
+   - CRUD operations for each main entity
+   - Error handling (invalid inputs, unauthorized access)
+   - Edge cases (empty states, long text, special characters)
+3. **Fix issues iteratively** — don't just report, fix and redeploy
+4. **Verify fixes** — test again after each fix
+5. **Document remaining issues** — only escalate blockers or design questions
+6. **Only then** ask for human UAT
+
+**UAT Checklist Template:**
+```
+□ Landing page renders correctly
+□ Registration works (valid + invalid inputs)
+□ Login works (valid + invalid credentials)
+□ Dashboard loads after login
+□ [Entity] list/create/view/edit/delete works
+□ Error messages display correctly
+□ Mobile responsive (if applicable)
+□ No console errors
+□ Page titles and branding correct
+```
 
 **Review output for hallucinations** before accepting:
 - Verify founder bios, personal info, company details
