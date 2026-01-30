@@ -149,9 +149,25 @@ Then continue:
 4. "Run /bmad-bmm-code-review to review" (adversarial — finds 3-10 issues minimum)
 
 → If issues: "Run /bmad-bmm-dev-story to fix the issues"
-→ If clean: "Run /bmad-bmm-create-story for the next story"
+→ If clean: Commit, then "Run /bmad-bmm-create-story for the next story"
 → Epic done: "Run /bmad-bmm-retrospective" then next epic
 ```
+
+**Commit after each story** — one story = one commit. Don't let work pile up.
+
+**Monitoring CC sessions:**
+| State | Signs | Action |
+|-------|-------|--------|
+| Thinking | Timer incrementing, spinner changing, file reads | Wait — extended thinking (5+ min) is normal |
+| Stuck | No output 5+ min, same state, no file changes | Kill and restart with clearer prompt |
+| Asking | CC asked a clarifying question | Answer it, let it continue |
+
+Check every 45-60 seconds. Patience beats panic-killing.
+
+**Review for hallucinations** — CC can invent plausible details. Before accepting:
+- Verify founder bios, personal info, company details
+- Check external URLs exist
+- Confirm dates/claims match source material
 
 **Quick Flow (simple tasks):**
 ```
@@ -215,11 +231,14 @@ Then run BMAD workflows to generate planning artifacts:
 ### 4. Implementation (orchestrate CC through BMAD)
 Follow the Phase 4 cycle above for each story.
 
-### 5. Pre-Deploy Checklist
-- [ ] `npm run build` passes
-- [ ] `npm run test` passes
+### 5. Pre-Deploy Checklist (UAT)
+- [ ] `npm run build` passes (no errors)
+- [ ] `npm run test` passes (all green)
 - [ ] `npm run dev` renders locally
+- [ ] Middleware size < 1MB (check build output)
+- [ ] Test key flows manually (landing, auth, main features)
 - [ ] All env vars documented in `.env.example`
+- [ ] Review any CC-generated content for hallucinations
 
 ### 6. Deploy to Vercel
 ```bash
@@ -255,6 +274,7 @@ When deploying to Vercel:
 4. **Common issues:**
    - Edge function > 1MB: This template uses lightweight JWT middleware to avoid this
    - useSearchParams errors: Wrap in Suspense (Next.js 15 requirement)
+   - Prisma version: Stay on v6.x — v7 has breaking changes. Template pins `"prisma": "^6.19.2"`
 
 ## Conventional Commits
 

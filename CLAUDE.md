@@ -455,8 +455,16 @@ This ensures the schema is locked before implementation begins. Adding tables/co
 > "Find 3-10 specific issues in every review minimum - no lazy 'looks good' reviews"
 
 - ❌ Issues found → Back to `/bmad-bmm-dev-story` for fixes
-- ✅ All issues resolved → `/bmad-bmm-create-story` for next story
+- ✅ All issues resolved → **Commit**, then `/bmad-bmm-create-story` for next story
 - 🏁 Epic complete → `/bmad-bmm-retrospective` then next epic
+
+**Commit after each story** — don't let work pile up uncommitted. One story = one commit.
+
+**Review output for hallucinations** before accepting:
+- Verify founder bios, personal info, company details
+- Check external URLs actually exist
+- Confirm dates and specific claims match source material
+- If it sounds specific but wasn't in the PRD/architecture, verify it
 
 ### Quick Flow (Simple Tasks)
 
