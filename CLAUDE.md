@@ -537,6 +537,34 @@ When working in WSL or cross-platform environments:
 - Keep functions transparent and testable
 - Prefer explicit over implicit behavior
 
+### Maximize CC Value (Beyond Code Gen)
+
+CC can do more than generate code. Use it for:
+
+**Architecture** — Before building complex features:
+```
+"How should we structure [feature]? Consider: data model, 
+component structure, API design, and tradeoffs."
+```
+
+**Review** — After completing a slice:
+```
+"Review this code for bugs, edge cases, security, 
+and accessibility. Be critical."
+```
+
+**Debug** — When stuck:
+```
+"This fails with [error]. Stack trace: [paste]. 
+I tried: [list]. Find the root cause and fix."
+```
+
+**Documentation** — Before handoff:
+```
+"Document this module for a new developer. Include 
+purpose, API, examples, and gotchas."
+```
+
 ---
 
 ## 📋 BMAD Method (V6)
