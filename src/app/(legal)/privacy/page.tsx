@@ -9,17 +9,13 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="container mx-auto max-w-4xl px-4 py-12">
       <h1 className="mb-8 text-3xl font-bold">Privacy Policy</h1>
-      
+
       <div className="prose prose-gray max-w-none">
-        <p className="text-muted-foreground">
-          Last updated: {new Date().toLocaleDateString()}
-        </p>
+        <p className="text-muted-foreground">Last updated: {new Date().toLocaleDateString()}</p>
 
         <section className="mt-8">
           <h2 className="text-2xl font-semibold">1. Information We Collect</h2>
-          <p>
-            We collect information you provide directly to us, including:
-          </p>
+          <p>We collect information you provide directly to us, including:</p>
           <ul>
             <li>Account information (name, email, password)</li>
             <li>Profile information you choose to provide</li>
@@ -42,9 +38,7 @@ export default function PrivacyPolicyPage() {
 
         <section className="mt-8">
           <h2 className="text-2xl font-semibold">3. Information Sharing</h2>
-          <p>
-            We do not sell your personal information. We may share information:
-          </p>
+          <p>We do not sell your personal information. We may share information:</p>
           <ul>
             <li>With your consent</li>
             <li>To comply with legal obligations</li>
@@ -56,9 +50,8 @@ export default function PrivacyPolicyPage() {
         <section className="mt-8">
           <h2 className="text-2xl font-semibold">4. Data Security</h2>
           <p>
-            We implement appropriate security measures to protect your personal
-            information, including encryption, secure connections, and access
-            controls.
+            We implement appropriate security measures to protect your personal information,
+            including encryption, secure connections, and access controls.
           </p>
         </section>
 
@@ -84,11 +77,11 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
 
-        <div className="mt-12 rounded-lg border bg-muted/50 p-4 text-sm">
+        <div className="bg-muted/50 mt-12 rounded-lg border p-4 text-sm">
           <p className="font-medium">⚠️ Template Notice</p>
           <p className="text-muted-foreground">
-            This is a template privacy policy. Have it reviewed by a legal
-            professional before using in production.
+            This is a template privacy policy. Have it reviewed by a legal professional before using
+            in production.
           </p>
         </div>
       </div>

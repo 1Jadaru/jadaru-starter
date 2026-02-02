@@ -19,7 +19,10 @@ export class AppError extends Error {
 }
 
 export class ValidationError extends AppError {
-  constructor(message: string, public errors?: Record<string, string[]>) {
+  constructor(
+    message: string,
+    public errors?: Record<string, string[]>
+  ) {
     super(message, 400, "VALIDATION_ERROR");
     this.name = "ValidationError";
   }
@@ -55,7 +58,7 @@ export class RateLimitError extends AppError {
 
 /**
  * Safe error response that never exposes sensitive information
- * 
+ *
  * Usage:
  * ```ts
  * try {
@@ -76,9 +79,7 @@ export function handleApiError(error: unknown): NextResponse {
       {
         error: error.message,
         code: error.code,
-        ...(error instanceof ValidationError && error.errors
-          ? { errors: error.errors }
-          : {}),
+        ...(error instanceof ValidationError && error.errors ? { errors: error.errors } : {}),
       },
       { status: error.statusCode }
     );
@@ -105,15 +106,12 @@ export function handleApiError(error: unknown): NextResponse {
         { status: 409 }
       );
     }
-    
+
     // Record not found
     if (error.code === "P2025") {
-      return NextResponse.json(
-        { error: "Record not found", code: "NOT_FOUND" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Record not found", code: "NOT_FOUND" }, { status: 404 });
     }
-    
+
     // Foreign key constraint
     if (error.code === "P2003") {
       return NextResponse.json(
@@ -127,7 +125,7 @@ export function handleApiError(error: unknown): NextResponse {
   const isDev = process.env.NODE_ENV === "development";
   const errorMessage = error instanceof Error ? error.message : "Unknown error";
   const errorStack = error instanceof Error ? error.stack : undefined;
-  
+
   return NextResponse.json(
     {
       error: isDev ? errorMessage : "An unexpected error occurred",
@@ -140,35 +138,26 @@ export function handleApiError(error: unknown): NextResponse {
 
 /**
  * Assert a condition and throw if false
- * 
+ *
  * Usage:
  * ```ts
  * assertAuth(session, "Must be logged in");
  * assertOwnership(resource.userId === session.user.id, "Not your resource");
  * ```
  */
-export function assertAuth(
-  condition: unknown,
-  message?: string
-): asserts condition {
+export function assertAuth(condition: unknown, message?: string): asserts condition {
   if (!condition) {
     throw new AuthenticationError(message);
   }
 }
 
-export function assertOwnership(
-  condition: boolean,
-  message?: string
-): asserts condition {
+export function assertOwnership(condition: boolean, message?: string): asserts condition {
   if (!condition) {
     throw new AuthorizationError(message);
   }
 }
 
-export function assertFound<T>(
-  value: T | null | undefined,
-  resource?: string
-): asserts value is T {
+export function assertFound<T>(value: T | null | undefined, resource?: string): asserts value is T {
   if (value === null || value === undefined) {
     throw new NotFoundError(resource);
   }

@@ -2,12 +2,12 @@ import { Resend } from "resend";
 
 /**
  * Email Service
- * 
+ *
  * Setup:
  * 1. Create account at https://resend.com
  * 2. Add RESEND_API_KEY to environment variables
  * 3. Verify your sending domain
- * 
+ *
  * Usage:
  * ```ts
  * await sendWelcomeEmail({ to: "user@example.com", name: "John" });
@@ -63,13 +63,7 @@ export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
 /**
  * Welcome Email
  */
-export async function sendWelcomeEmail({
-  to,
-  name,
-}: {
-  to: string;
-  name: string;
-}) {
+export async function sendWelcomeEmail({ to, name }: { to: string; name: string }) {
   return sendEmail({
     to,
     subject: `Welcome to ${APP_NAME}!`,
@@ -102,13 +96,7 @@ export async function sendWelcomeEmail({
 /**
  * Password Reset Email
  */
-export async function sendPasswordResetEmail({
-  to,
-  resetUrl,
-}: {
-  to: string;
-  resetUrl: string;
-}) {
+export async function sendPasswordResetEmail({ to, resetUrl }: { to: string; resetUrl: string }) {
   return sendEmail({
     to,
     subject: `Reset your ${APP_NAME} password`,
@@ -140,13 +128,7 @@ export async function sendPasswordResetEmail({
 /**
  * Email Verification
  */
-export async function sendVerificationEmail({
-  to,
-  verifyUrl,
-}: {
-  to: string;
-  verifyUrl: string;
-}) {
+export async function sendVerificationEmail({ to, verifyUrl }: { to: string; verifyUrl: string }) {
   return sendEmail({
     to,
     subject: `Verify your ${APP_NAME} email`,

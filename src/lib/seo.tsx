@@ -2,7 +2,7 @@ import { Metadata } from "next";
 
 /**
  * SEO Utilities
- * 
+ *
  * Helpers for generating metadata, OpenGraph tags, and structured data.
  */
 
@@ -18,7 +18,7 @@ export const siteConfig = {
 
 /**
  * Generate metadata for a page
- * 
+ *
  * Usage:
  * ```ts
  * export const metadata = generateMetadata({
@@ -76,9 +76,7 @@ export function generateMetadata({
       images: [ogImage],
       creator: siteConfig.twitterHandle,
     },
-    robots: noIndex
-      ? { index: false, follow: false }
-      : { index: true, follow: true },
+    robots: noIndex ? { index: false, follow: false } : { index: true, follow: true },
   };
 }
 
@@ -163,7 +161,7 @@ export function articleJsonLd({
 
 /**
  * Component to inject JSON-LD into the page
- * 
+ *
  * Usage:
  * ```tsx
  * <JsonLd data={organizationJsonLd()} />
@@ -171,9 +169,6 @@ export function articleJsonLd({
  */
 export function JsonLd({ data }: { data: object }) {
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
-    />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />
   );
 }

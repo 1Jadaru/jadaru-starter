@@ -16,14 +16,14 @@ import { env } from "@/lib/env";
 
 The following security headers are set on all responses:
 
-| Header | Value | Purpose |
-|--------|-------|---------|
-| X-Frame-Options | DENY | Prevent clickjacking |
-| X-Content-Type-Options | nosniff | Prevent MIME sniffing |
-| X-XSS-Protection | 1; mode=block | Enable XSS filter |
-| Referrer-Policy | strict-origin-when-cross-origin | Control referrer info |
-| Permissions-Policy | camera=(), microphone=(), geolocation=() | Restrict features |
-| Strict-Transport-Security | max-age=31536000; includeSubDomains | Enforce HTTPS |
+| Header                    | Value                                    | Purpose               |
+| ------------------------- | ---------------------------------------- | --------------------- |
+| X-Frame-Options           | DENY                                     | Prevent clickjacking  |
+| X-Content-Type-Options    | nosniff                                  | Prevent MIME sniffing |
+| X-XSS-Protection          | 1; mode=block                            | Enable XSS filter     |
+| Referrer-Policy           | strict-origin-when-cross-origin          | Control referrer info |
+| Permissions-Policy        | camera=(), microphone=(), geolocation=() | Restrict features     |
+| Strict-Transport-Security | max-age=31536000; includeSubDomains      | Enforce HTTPS         |
 
 ### 3. Rate Limiting
 
@@ -35,7 +35,7 @@ import { rateLimit, getClientIp, RATE_LIMITS } from "@/lib/rate-limit";
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
   const { success } = rateLimit(ip, RATE_LIMITS.auth);
-  
+
   if (!success) {
     return rateLimitResponse(resetTime);
   }
@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
 ```
 
 Default limits:
+
 - Auth endpoints: 5 requests/minute
 - Registration: 3 requests/hour
 - API endpoints: 60 requests/minute
@@ -117,6 +118,7 @@ const records = await db.record.findMany({
 ### 8. Authentication Security
 
 NextAuth.js provides:
+
 - CSRF protection (automatic)
 - Secure session cookies (HttpOnly, Secure, SameSite)
 - Password hashing (bcrypt)
@@ -155,6 +157,7 @@ This template is designed to support:
 ## Dependencies
 
 Security-relevant dependencies:
+
 - `bcryptjs`: Password hashing
 - `next-auth`: Authentication framework
 - `zod`: Input validation

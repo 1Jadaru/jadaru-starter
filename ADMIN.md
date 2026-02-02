@@ -5,6 +5,7 @@ This document outlines the admin portal architecture for enterprise applications
 ## Overview
 
 The admin portal provides tools for:
+
 - User management and support
 - Audit log viewing
 - Analytics and metrics
@@ -60,16 +61,16 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  
+
   if (!session?.user) {
     redirect("/login");
   }
-  
+
   // Check for admin role
   if (session.user.role !== "ADMIN" && session.user.role !== "SUPERADMIN") {
     redirect("/dashboard?error=unauthorized");
   }
-  
+
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
@@ -83,42 +84,42 @@ export default async function AdminLayout({
 
 ### 1. User Management
 
-| Feature | Priority | Complexity |
-|---------|----------|------------|
-| List users with search/filter | High | Low |
-| View user details | High | Low |
-| Suspend/unsuspend account | High | Low |
-| Delete account (soft) | High | Low |
-| Impersonate user | Medium | Medium |
-| Reset password | Medium | Low |
-| Bulk actions | Low | Medium |
+| Feature                       | Priority | Complexity |
+| ----------------------------- | -------- | ---------- |
+| List users with search/filter | High     | Low        |
+| View user details             | High     | Low        |
+| Suspend/unsuspend account     | High     | Low        |
+| Delete account (soft)         | High     | Low        |
+| Impersonate user              | Medium   | Medium     |
+| Reset password                | Medium   | Low        |
+| Bulk actions                  | Low      | Medium     |
 
 ### 2. Audit Log Viewer
 
-| Feature | Priority | Complexity |
-|---------|----------|------------|
-| List audit events | High | Low |
-| Filter by user/action/date | High | Medium |
-| Export to CSV | Medium | Low |
-| Real-time updates | Low | High |
+| Feature                    | Priority | Complexity |
+| -------------------------- | -------- | ---------- |
+| List audit events          | High     | Low        |
+| Filter by user/action/date | High     | Medium     |
+| Export to CSV              | Medium   | Low        |
+| Real-time updates          | Low      | High       |
 
 ### 3. Analytics Dashboard
 
-| Feature | Priority | Complexity |
-|---------|----------|------------|
-| User signup chart | High | Medium |
-| Active users (DAU/MAU) | High | Medium |
-| Feature usage | Medium | Medium |
-| Error rate trends | Medium | High |
+| Feature                | Priority | Complexity |
+| ---------------------- | -------- | ---------- |
+| User signup chart      | High     | Medium     |
+| Active users (DAU/MAU) | High     | Medium     |
+| Feature usage          | Medium   | Medium     |
+| Error rate trends      | Medium   | High       |
 
 ### 4. System Settings
 
-| Feature | Priority | Complexity |
-|---------|----------|------------|
-| Feature flags | Medium | Medium |
-| Rate limit config | Low | Low |
-| Maintenance mode | Medium | Low |
-| Email templates | Low | High |
+| Feature           | Priority | Complexity |
+| ----------------- | -------- | ---------- |
+| Feature flags     | Medium   | Medium     |
+| Rate limit config | Low      | Low        |
+| Maintenance mode  | Medium   | Low        |
+| Email templates   | Low      | High       |
 
 ## API Routes
 
@@ -164,7 +165,7 @@ Common admin queries to implement:
 // User stats
 const userCount = await db.user.count();
 const activeUsers = await db.user.count({
-  where: { lastActiveAt: { gte: thirtyDaysAgo } }
+  where: { lastActiveAt: { gte: thirtyDaysAgo } },
 });
 
 // Audit log query with pagination
@@ -221,4 +222,4 @@ const users = await db.user.findMany({
 
 ---
 
-*This is a planning document. Implementation should be done per-project based on specific needs.*
+_This is a planning document. Implementation should be done per-project based on specific needs._

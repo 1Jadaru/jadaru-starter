@@ -2,7 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 
 /**
  * Sentry Edge Configuration
- * 
+ *
  * This configures error tracking for Edge runtime (middleware).
  */
 Sentry.init({

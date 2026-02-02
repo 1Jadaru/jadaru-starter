@@ -2,9 +2,9 @@ import * as Sentry from "@sentry/nextjs";
 
 /**
  * Sentry Client Configuration
- * 
+ *
  * This configures error tracking for the browser/client side.
- * 
+ *
  * Setup:
  * 1. Create a Sentry project at https://sentry.io
  * 2. Add NEXT_PUBLIC_SENTRY_DSN to your environment variables

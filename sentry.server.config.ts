@@ -2,7 +2,7 @@ import * as Sentry from "@sentry/nextjs";
 
 /**
  * Sentry Server Configuration
- * 
+ *
  * This configures error tracking for the server side (API routes, SSR).
  */
 Sentry.init({

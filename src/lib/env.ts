@@ -7,17 +7,17 @@ import { z } from "zod";
 const envSchema = z.object({
   // Database
   DATABASE_URL: z.string().url().startsWith("postgresql://"),
-  
+
   // Auth
   NEXTAUTH_URL: z.string().url(),
   NEXTAUTH_SECRET: z.string().min(32, "NEXTAUTH_SECRET must be at least 32 characters"),
-  
+
   // Optional OAuth providers
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
   GITHUB_CLIENT_ID: z.string().optional(),
   GITHUB_CLIENT_SECRET: z.string().optional(),
-  
+
   // App
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
 });
@@ -30,13 +30,13 @@ export type Env = z.infer<typeof envSchema>;
  */
 function validateEnv(): Env {
   const parsed = envSchema.safeParse(process.env);
-  
+
   if (!parsed.success) {
     // eslint-disable-next-line no-console
     console.error("❌ Invalid environment variables:", parsed.error.flatten().fieldErrors);
     throw new Error("Invalid environment variables");
   }
-  
+
   return parsed.data;
 }
 

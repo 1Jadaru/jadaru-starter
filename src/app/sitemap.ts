@@ -2,10 +2,10 @@ import { MetadataRoute } from "next";
 
 /**
  * Sitemap Configuration
- * 
+ *
  * Generates a sitemap.xml for search engines.
  * Add dynamic pages (blog posts, products, etc.) here.
- * 
+ *
  * See: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
  */
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Static pages
   const staticPages = [
-    "",           // Home
+    "", // Home
     "/login",
     "/register",
     "/privacy",

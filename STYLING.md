@@ -10,12 +10,11 @@
 
 ```tsx
 // BAD - Custom classes may not be generated or have specificity issues
-<Button className="bg-hometrace-gold text-white hover:bg-hometrace-gold/90">
-  Add Record
-</Button>
+<Button className="bg-hometrace-gold hover:bg-hometrace-gold/90 text-white">Add Record</Button>
 ```
 
 **Problems:**
+
 - Tailwind JIT might not generate custom color classes
 - CSS specificity conflicts with shadcn/ui component styles
 - Buttons can appear invisible or with wrong colors
@@ -67,6 +66,7 @@ colors: {
 ```
 
 These work for **non-interactive elements** (text, borders, backgrounds on divs):
+
 ```tsx
 <h1 className="text-hometrace-green">Title</h1>
 <div className="border-hometrace-gold">...</div>
@@ -87,4 +87,4 @@ If a button or component appears invisible:
 
 ---
 
-*Last updated: 2026-01-30*
+_Last updated: 2026-01-30_

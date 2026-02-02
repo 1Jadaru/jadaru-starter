@@ -6,7 +6,7 @@ const globalForPrisma = globalThis as unknown as {
 
 /**
  * Prisma client with security configurations
- * 
+ *
  * Security features:
  * - Query logging in development only
  * - Error logging in production
@@ -16,9 +16,7 @@ const globalForPrisma = globalThis as unknown as {
 export const db =
   globalForPrisma.prisma ??
   new PrismaClient({
-    log: process.env.NODE_ENV === "development" 
-      ? ["query", "error", "warn"] 
-      : ["error"],
+    log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
     // Note: Connection limits are set via DATABASE_URL params:
     // ?connection_limit=5&pool_timeout=10
   });
@@ -28,7 +26,7 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
 /**
  * Ensure user can only access their own resources
  * Use this in API routes to enforce data isolation
- * 
+ *
  * Usage:
  * ```ts
  * const property = await db.property.findFirst({
@@ -45,7 +43,7 @@ export function ownershipFilter(userId: string) {
 
 /**
  * Soft delete filter - exclude deleted records by default
- * 
+ *
  * Usage:
  * ```ts
  * const records = await db.record.findMany({
@@ -61,16 +59,17 @@ export function notDeleted() {
 
 /**
  * Perform a soft delete instead of hard delete
- * 
+ *
  * Usage:
  * ```ts
  * await softDelete(db.record, recordId);
  * ```
  */
-export async function softDelete<T extends { update: (args: { where: { id: string }; data: { deletedAt: Date } }) => Promise<unknown> }>(
-  model: T,
-  id: string
-): Promise<void> {
+export async function softDelete<
+  T extends {
+    update: (args: { where: { id: string }; data: { deletedAt: Date } }) => Promise<unknown>;
+  },
+>(model: T, id: string): Promise<void> {
   await model.update({
     where: { id },
     data: { deletedAt: new Date() },
@@ -79,7 +78,7 @@ export async function softDelete<T extends { update: (args: { where: { id: strin
 
 /**
  * Transaction helper with automatic rollback on error
- * 
+ *
  * Usage:
  * ```ts
  * await transaction(async (tx) => {
@@ -89,7 +88,12 @@ export async function softDelete<T extends { update: (args: { where: { id: strin
  * ```
  */
 export async function transaction<T>(
-  fn: (tx: Omit<PrismaClient, "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends">) => Promise<T>
+  fn: (
+    tx: Omit<
+      PrismaClient,
+      "$connect" | "$disconnect" | "$on" | "$transaction" | "$use" | "$extends"
+    >
+  ) => Promise<T>
 ): Promise<T> {
   return db.$transaction(fn, {
     maxWait: 5000, // 5 seconds max wait for transaction slot

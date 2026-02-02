@@ -2,7 +2,7 @@ import { MetadataRoute } from "next";
 
 /**
  * Robots.txt Configuration
- * 
+ *
  * Controls which pages search engines can crawl.
  * See: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/robots
  */
@@ -15,10 +15,10 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "*",
         allow: "/",
         disallow: [
-          "/api/",        // API routes
-          "/admin/",      // Admin pages
-          "/dashboard/",  // User dashboard (private)
-          "/_next/",      // Next.js internals
+          "/api/", // API routes
+          "/admin/", // Admin pages
+          "/dashboard/", // User dashboard (private)
+          "/_next/", // Next.js internals
         ],
       },
     ],

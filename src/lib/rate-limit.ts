@@ -10,15 +10,15 @@ const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 /**
  * Simple rate limiter for API routes
- * 
+ *
  * Usage in API route:
  * ```ts
  * import { rateLimit, getClientIp } from "@/lib/rate-limit";
- * 
+ *
  * export async function POST(req: NextRequest) {
  *   const ip = getClientIp(req);
  *   const { success, remaining } = rateLimit(ip, { limit: 5, interval: 60000 });
- *   
+ *
  *   if (!success) {
  *     return NextResponse.json({ error: "Too many requests" }, { status: 429 });
  *   }
@@ -64,16 +64,16 @@ export function rateLimit(
 export function getClientIp(req: NextRequest): string {
   const forwarded = req.headers.get("x-forwarded-for");
   const realIp = req.headers.get("x-real-ip");
-  
+
   if (forwarded) {
     const firstIp = forwarded.split(",")[0];
     return firstIp ? firstIp.trim() : "unknown";
   }
-  
+
   if (realIp) {
     return realIp;
   }
-  
+
   return "unknown";
 }
 
@@ -82,7 +82,7 @@ export function getClientIp(req: NextRequest): string {
  */
 export function rateLimitResponse(resetTime: number): NextResponse {
   const retryAfter = Math.ceil((resetTime - Date.now()) / 1000);
-  
+
   return NextResponse.json(
     { error: "Too many requests. Please try again later." },
     {
@@ -115,10 +115,10 @@ export const RATE_LIMITS = {
   // Auth endpoints - stricter limits
   auth: { interval: 60000, limit: 5 }, // 5 per minute
   register: { interval: 3600000, limit: 3 }, // 3 per hour
-  
+
   // API endpoints - standard limits
   api: { interval: 60000, limit: 60 }, // 60 per minute
-  
+
   // Report generation - expensive operation
   report: { interval: 60000, limit: 5 }, // 5 per minute
 } as const;

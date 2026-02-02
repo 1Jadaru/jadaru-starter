@@ -8,13 +8,13 @@ export const metadata: Metadata = {
 
 /**
  * Admin Dashboard
- * 
+ *
  * TODO: Implement these features:
  * - User count stats
  * - Recent signups
  * - System health status
  * - Quick actions
- * 
+ *
  * See ADMIN.md for full implementation guide.
  */
 export default function AdminDashboardPage() {
@@ -36,14 +36,11 @@ export default function AdminDashboardPage() {
         <div className="flex gap-4">
           <Link
             href="/admin/users"
-            className="rounded-lg bg-primary px-4 py-2 text-primary-foreground hover:bg-primary/90"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-4 py-2"
           >
             Manage Users
           </Link>
-          <Link
-            href="/admin/audit"
-            className="rounded-lg border px-4 py-2 hover:bg-gray-50"
-          >
+          <Link href="/admin/audit" className="rounded-lg border px-4 py-2 hover:bg-gray-50">
             View Audit Logs
           </Link>
         </div>
@@ -53,9 +50,9 @@ export default function AdminDashboardPage() {
       <div className="rounded-lg border bg-amber-50 p-6">
         <h3 className="mb-2 font-semibold text-amber-800">🚧 Implementation Required</h3>
         <p className="text-amber-700">
-          This is a starter template. Implement the dashboard features based on your
-          application needs. See <code className="rounded bg-amber-100 px-1">ADMIN.md</code> for
-          the full implementation guide.
+          This is a starter template. Implement the dashboard features based on your application
+          needs. See <code className="rounded bg-amber-100 px-1">ADMIN.md</code> for the full
+          implementation guide.
         </p>
       </div>
     </div>

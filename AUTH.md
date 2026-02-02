@@ -9,6 +9,7 @@ This guide covers Auth.js v5 (NextAuth v5) setup for Next.js 15 App Router proje
 ## Required Environment Variables
 
 ### Development (`.env.local`)
+
 ```env
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
@@ -16,13 +17,14 @@ AUTH_TRUST_HOST="true"
 ```
 
 ### Production (Vercel)
+
 Set these in Vercel Dashboard → Settings → Environment Variables:
 
-| Variable | Value | Environments |
-|----------|-------|--------------|
-| `NEXTAUTH_URL` | `https://your-app.vercel.app` | Production |
-| `NEXTAUTH_SECRET` | `openssl rand -base64 32` | All |
-| `AUTH_TRUST_HOST` | `true` | Production |
+| Variable          | Value                         | Environments |
+| ----------------- | ----------------------------- | ------------ |
+| `NEXTAUTH_URL`    | `https://your-app.vercel.app` | Production   |
+| `NEXTAUTH_SECRET` | `openssl rand -base64 32`     | All          |
+| `AUTH_TRUST_HOST` | `true`                        | Production   |
 
 **Critical:** `AUTH_TRUST_HOST=true` is required for Auth.js v5 in production!
 
@@ -33,6 +35,7 @@ Set these in Vercel Dashboard → Settings → Environment Variables:
 Auth.js client-side functions (`signIn`, `signOut`, `useSession`) require `SessionProvider`.
 
 ### 1. Create providers component
+
 ```tsx
 // src/components/providers.tsx
 "use client";
@@ -45,6 +48,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 ```
 
 ### 2. Wrap in root layout
+
 ```tsx
 // src/app/layout.tsx
 import { Providers } from "@/components/providers";
@@ -67,6 +71,7 @@ export default function RootLayout({ children }) {
 ### ⚠️ Edge Runtime Limitations
 
 **DO NOT** import your auth config directly in middleware:
+
 ```tsx
 // ❌ BAD - This pulls in Prisma, bcrypt, etc. (>1MB, exceeds Edge limit)
 import { auth } from "@/lib/auth";
@@ -82,15 +87,14 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   // Auth.js v5 cookie names
-  const sessionToken = req.cookies.get("authjs.session-token")?.value 
-    || req.cookies.get("__Secure-authjs.session-token")?.value;
-  
+  const sessionToken =
+    req.cookies.get("authjs.session-token")?.value ||
+    req.cookies.get("__Secure-authjs.session-token")?.value;
+
   const isLoggedIn = !!sessionToken;
-  
+
   const protectedPaths = ["/dashboard", "/properties", "/records"];
-  const isProtected = protectedPaths.some(path => 
-    req.nextUrl.pathname.startsWith(path)
-  );
+  const isProtected = protectedPaths.some((path) => req.nextUrl.pathname.startsWith(path));
 
   if (isProtected && !isLoggedIn) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
@@ -149,11 +153,7 @@ export default function LoginPage() {
     }
   }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      {/* form fields */}
-    </form>
-  );
+  return <form onSubmit={handleSubmit}>{/* form fields */}</form>;
 }
 ```
 
@@ -177,14 +177,14 @@ Add `prisma generate` to your build script for Vercel:
 
 ## Common Issues & Solutions
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Sign in button does nothing | Missing SessionProvider | Wrap app in SessionProvider |
-| "UntrustedHost" error | Missing AUTH_TRUST_HOST | Add `AUTH_TRUST_HOST=true` to env |
-| Login works but redirects back to /login | Middleware not reading session | Use cookie check pattern (not auth import) |
-| Edge Function >1MB error | Importing auth in middleware | Use lightweight cookie check |
-| Session exists but middleware rejects | Wrong cookie name | Check for both `authjs.session-token` and `__Secure-authjs.session-token` |
-| `router.push()` doesn't redirect | React state timing | Use `window.location.href` instead |
+| Issue                                    | Cause                          | Solution                                                                  |
+| ---------------------------------------- | ------------------------------ | ------------------------------------------------------------------------- |
+| Sign in button does nothing              | Missing SessionProvider        | Wrap app in SessionProvider                                               |
+| "UntrustedHost" error                    | Missing AUTH_TRUST_HOST        | Add `AUTH_TRUST_HOST=true` to env                                         |
+| Login works but redirects back to /login | Middleware not reading session | Use cookie check pattern (not auth import)                                |
+| Edge Function >1MB error                 | Importing auth in middleware   | Use lightweight cookie check                                              |
+| Session exists but middleware rejects    | Wrong cookie name              | Check for both `authjs.session-token` and `__Secure-authjs.session-token` |
+| `router.push()` doesn't redirect         | React state timing             | Use `window.location.href` instead                                        |
 
 ---
 
@@ -200,4 +200,4 @@ Add `prisma generate` to your build script for Vercel:
 
 ---
 
-*Last updated: 2026-01-30*
+_Last updated: 2026-01-30_

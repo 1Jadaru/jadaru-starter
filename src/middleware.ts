@@ -7,10 +7,10 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const isLoggedIn = !!token;
-  
+
   // Add protected paths here
   const protectedPaths = ["/dashboard"];
-  const isProtected = protectedPaths.some(path => req.nextUrl.pathname.startsWith(path));
+  const isProtected = protectedPaths.some((path) => req.nextUrl.pathname.startsWith(path));
 
   if (isProtected && !isLoggedIn) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));

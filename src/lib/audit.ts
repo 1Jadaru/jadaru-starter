@@ -1,6 +1,6 @@
 /**
  * Audit logging for security and compliance
- * 
+ *
  * Tracks user actions for:
  * - Security monitoring
  * - Compliance (SOC 2, GDPR)
@@ -36,12 +36,12 @@ export interface AuditLogEntry {
 
 /**
  * Log an audit event
- * 
+ *
  * In production, this should write to:
  * - A dedicated audit log table in the database
  * - An external logging service (Datadog, Splunk, etc.)
  * - Both for redundancy
- * 
+ *
  * Usage:
  * ```ts
  * await auditLog({
@@ -54,9 +54,7 @@ export interface AuditLogEntry {
  * });
  * ```
  */
-export async function auditLog(
-  entry: Omit<AuditLogEntry, "timestamp">
-): Promise<void> {
+export async function auditLog(entry: Omit<AuditLogEntry, "timestamp">): Promise<void> {
   const logEntry: AuditLogEntry = {
     timestamp: new Date().toISOString(),
     ...entry,
@@ -72,7 +70,7 @@ export async function auditLog(
   // In production, persist to database
   // TODO: Implement database persistence
   // await db.auditLog.create({ data: logEntry });
-  
+
   // Also log to structured logging service (intentional console use)
   // eslint-disable-next-line no-console
   console.log(JSON.stringify({ type: "audit", ...logEntry }));
@@ -80,7 +78,7 @@ export async function auditLog(
 
 /**
  * Create an audit log middleware for API routes
- * 
+ *
  * Usage:
  * ```ts
  * export async function POST(req: NextRequest) {
@@ -103,10 +101,10 @@ export async function withAuditLog<T>(
   }
 ): Promise<T> {
   const startTime = Date.now();
-  
+
   try {
     const result = await handler();
-    
+
     await auditLog({
       action,
       userId: options?.userId ?? null,
@@ -120,7 +118,7 @@ export async function withAuditLog<T>(
       userAgent: req.headers.get("user-agent") ?? undefined,
       success: true,
     });
-    
+
     return result;
   } catch (error) {
     await auditLog({
@@ -137,7 +135,7 @@ export async function withAuditLog<T>(
       success: false,
       errorMessage: error instanceof Error ? error.message : "Unknown error",
     });
-    
+
     throw error;
   }
 }
@@ -146,24 +144,14 @@ export async function withAuditLog<T>(
  * Sanitize sensitive data before logging
  * Removes or masks PII and secrets
  */
-export function sanitizeForLogging(
-  data: Record<string, unknown>
-): Record<string, unknown> {
-  const sensitiveKeys = [
-    "password",
-    "token",
-    "secret",
-    "apiKey",
-    "creditCard",
-    "ssn",
-    "email",
-  ];
-  
+export function sanitizeForLogging(data: Record<string, unknown>): Record<string, unknown> {
+  const sensitiveKeys = ["password", "token", "secret", "apiKey", "creditCard", "ssn", "email"];
+
   const sanitized: Record<string, unknown> = {};
-  
+
   for (const [key, value] of Object.entries(data)) {
     const lowerKey = key.toLowerCase();
-    
+
     if (sensitiveKeys.some((k) => lowerKey.includes(k))) {
       sanitized[key] = "[REDACTED]";
     } else if (typeof value === "object" && value !== null) {
@@ -172,6 +160,6 @@ export function sanitizeForLogging(
       sanitized[key] = value;
     }
   }
-  
+
   return sanitized;
 }

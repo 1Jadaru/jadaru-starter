@@ -4,20 +4,16 @@ import Link from "next/link";
 
 /**
  * Admin Layout
- * 
+ *
  * Protects all /admin/* routes and provides admin navigation.
- * 
+ *
  * Prerequisites:
  * 1. Add 'role' field to User model in Prisma schema
  * 2. Add role to session in auth.ts callbacks
- * 
+ *
  * See ADMIN.md for full implementation guide.
  */
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
 
   // Must be authenticated
@@ -77,10 +73,7 @@ export default async function AdminLayout({
           </ul>
         </nav>
         <div className="absolute bottom-0 w-64 border-t p-4">
-          <Link
-            href="/dashboard"
-            className="block text-sm text-gray-500 hover:text-gray-700"
-          >
+          <Link href="/dashboard" className="block text-sm text-gray-500 hover:text-gray-700">
             ← Back to App
           </Link>
         </div>
@@ -90,9 +83,7 @@ export default async function AdminLayout({
       <main className="flex-1">
         <header className="flex h-16 items-center justify-between border-b bg-white px-8">
           <h1 className="text-lg font-semibold">Admin</h1>
-          <div className="text-sm text-gray-500">
-            {session.user.email}
-          </div>
+          <div className="text-sm text-gray-500">{session.user.email}</div>
         </header>
         <div className="p-8">{children}</div>
       </main>

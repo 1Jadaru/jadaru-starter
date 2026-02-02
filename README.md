@@ -41,23 +41,23 @@ Open [http://localhost:3000](http://localhost:3000) to see the app.
 
 ## Available Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start development server (Turbopack) |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run lint:fix` | Fix ESLint issues |
-| `npm run format` | Format with Prettier |
-| `npm run format:check` | Check formatting |
-| `npm run type-check` | TypeScript type checking |
-| `npm run test` | Run tests |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run test:coverage` | Run tests with coverage |
-| `npm run db:push` | Push schema to database |
-| `npm run db:migrate` | Run database migrations |
-| `npm run db:studio` | Open Prisma Studio |
-| `npm run db:generate` | Generate Prisma Client |
+| Script                  | Description                          |
+| ----------------------- | ------------------------------------ |
+| `npm run dev`           | Start development server (Turbopack) |
+| `npm run build`         | Build for production                 |
+| `npm run start`         | Start production server              |
+| `npm run lint`          | Run ESLint                           |
+| `npm run lint:fix`      | Fix ESLint issues                    |
+| `npm run format`        | Format with Prettier                 |
+| `npm run format:check`  | Check formatting                     |
+| `npm run type-check`    | TypeScript type checking             |
+| `npm run test`          | Run tests                            |
+| `npm run test:watch`    | Run tests in watch mode              |
+| `npm run test:coverage` | Run tests with coverage              |
+| `npm run db:push`       | Push schema to database              |
+| `npm run db:migrate`    | Run database migrations              |
+| `npm run db:studio`     | Open Prisma Studio                   |
+| `npm run db:generate`   | Generate Prisma Client               |
 
 ## Project Structure
 
@@ -124,6 +124,7 @@ This template includes [BMAD Method](https://github.com/bmad-code-org/BMAD-METHO
 When managing CC sessions, invoke BMAD workflows by telling CC which slash command to run:
 
 **Planning Phase (Phases 1-3):**
+
 ```
 "Run /bmad-bmm-create-brief to create the product brief"
 "Run /bmad-bmm-prd to create the PRD"
@@ -131,6 +132,7 @@ When managing CC sessions, invoke BMAD workflows by telling CC which slash comma
 ```
 
 **Schema Generation (after architecture, before epics):**
+
 ```
 "Based on the architecture, generate the complete prisma/schema.prisma file.
 Include all entities from the PRD, soft delete fields (deletedAt), audit fields
@@ -139,6 +141,7 @@ Include the NextAuth models."
 ```
 
 Then continue:
+
 ```
 "Run /bmad-bmm-create-epics-and-stories to break down the work"
 ```
@@ -146,6 +149,7 @@ Then continue:
 > ⚠️ **Why schema first?** Adding tables/columns mid-project risks data loss. Lock the schema before implementation.
 
 **Implementation Phase (Phase 4) — repeat per story:**
+
 ```
 1. "Run /bmad-bmm-sprint-planning to initialize the sprint"
 2. "Run /bmad-bmm-create-story to prepare the next story"
@@ -169,11 +173,13 @@ Then continue:
 Check every 45-60 seconds. Patience beats panic-killing.
 
 **Review for hallucinations** — CC can invent plausible details. Before accepting:
+
 - Verify founder bios, personal info, company details
 - Check external URLs exist
 - Confirm dates/claims match source material
 
 **Quick Flow (simple tasks):**
+
 ```
 "Run /bmad-bmm-quick-spec for a tech spec"
 "Run /bmad-bmm-quick-dev to implement"
@@ -181,22 +187,22 @@ Check every 45-60 seconds. Patience beats panic-killing.
 
 ### BMAD Agents
 
-| Agent | Name | Specialty |
-|-------|------|-----------|
-| 📊 Analyst | Mary | Product briefs, research |
-| 📋 PM | John | PRDs, epics & stories |
-| 🏗️ Architect | Winston | Technical architecture |
-| 🎨 UX Designer | Sally | UX design, wireframes |
-| 🏃 Scrum Master | Bob | Sprint management |
-| 💻 Developer | Amelia | Implementation & code review |
-| 🚀 Quick Flow | Barry | Fast-track simple tasks |
+| Agent           | Name    | Specialty                    |
+| --------------- | ------- | ---------------------------- |
+| 📊 Analyst      | Mary    | Product briefs, research     |
+| 📋 PM           | John    | PRDs, epics & stories        |
+| 🏗️ Architect    | Winston | Technical architecture       |
+| 🎨 UX Designer  | Sally   | UX design, wireframes        |
+| 🏃 Scrum Master | Bob     | Sprint management            |
+| 💻 Developer    | Amelia  | Implementation & code review |
+| 🚀 Quick Flow   | Barry   | Fast-track simple tasks      |
 
 ### Output Locations
 
-| Artifact | Location |
-|----------|----------|
-| Planning docs | `_bmad-output/planning-artifacts/` |
-| Story files | `_bmad-output/implementation-artifacts/` |
+| Artifact      | Location                                                   |
+| ------------- | ---------------------------------------------------------- |
+| Planning docs | `_bmad-output/planning-artifacts/`                         |
+| Story files   | `_bmad-output/implementation-artifacts/`                   |
 | Sprint status | `_bmad-output/implementation-artifacts/sprint-status.yaml` |
 
 ---
@@ -206,6 +212,7 @@ Check every 45-60 seconds. Patience beats panic-killing.
 When starting a new project from this template:
 
 ### 1. Clone and Configure
+
 ```bash
 cp -r ~/projects/jadaru-starter ~/projects/my-new-app
 cd ~/projects/my-new-app
@@ -216,26 +223,32 @@ cd ~/projects/my-new-app
 - [ ] Create GitHub repo: `gh repo create username/my-new-app --private --source=. --push`
 
 ### 2. Environment Setup
+
 - [ ] Copy `.env.example` to `.env`
 - [ ] Generate `NEXTAUTH_SECRET`: `openssl rand -base64 32`
 - [ ] Set `DATABASE_URL` (or add Neon via Vercel later)
 
 ### 3. BMAD Planning (in Claude Code)
+
 ```bash
 cd ~/projects/my-new-app
 claude --dangerously-skip-permissions
 ```
+
 Then run BMAD workflows to generate planning artifacts:
+
 1. `/bmad-bmm-create-brief` → product-brief.md
-2. `/bmad-bmm-prd` → prd.md  
+2. `/bmad-bmm-prd` → prd.md
 3. `/bmad-bmm-create-architecture` → architecture.md
 4. **Generate schema** → prisma/schema.prisma (see prompt above)
 5. `/bmad-bmm-create-epics-and-stories` → epics.md
 
 ### 4. Implementation (orchestrate CC through BMAD)
+
 Follow the Phase 4 cycle above for each story.
 
 ### 5. Pre-Deploy Checklist
+
 - [ ] `npm run build` passes (no errors)
 - [ ] `npm run test` passes (all green)
 - [ ] `npm run dev` renders locally
@@ -244,11 +257,12 @@ Follow the Phase 4 cycle above for each story.
 - [ ] Review any CC-generated content for hallucinations
 
 ### 6. Post-Deploy UAT (Agent does this before human UAT)
+
 **Do full iterative UAT before asking the human to test.**
 
 - [ ] Create test account on live site
 - [ ] Registration works (valid + invalid inputs)
-- [ ] Login works (valid + invalid credentials)  
+- [ ] Login works (valid + invalid credentials)
 - [ ] Dashboard loads after login
 - [ ] CRUD operations for each main entity
 - [ ] Error messages display correctly
@@ -258,10 +272,12 @@ Follow the Phase 4 cycle above for each story.
 - [ ] Only escalate blockers or design questions
 
 ### 7. Deploy to Vercel
+
 ```bash
 vercel link
 vercel --prod
 ```
+
 - Add Neon Postgres via Vercel Storage tab
 - Set `NEXTAUTH_SECRET` in environment variables
 - Push schema: `vercel env pull .env.local && npx prisma db push`
@@ -271,6 +287,7 @@ vercel --prod
 When deploying to Vercel:
 
 1. **Git author must match Vercel team**
+
    ```bash
    git config user.email "your-vercel-email@example.com"
    ```
@@ -281,6 +298,7 @@ When deploying to Vercel:
    - `NEXTAUTH_URL` — Your production URL
 
 3. **Push schema to database:**
+
    ```bash
    # Pull Vercel env vars locally
    vercel env pull .env.local

@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 /**
  * Global Error Boundary
- * 
+ *
  * Catches unhandled errors in the app and reports them to Sentry.
  * Shows a user-friendly error page.
  */
@@ -32,7 +32,7 @@ export default function GlobalError({
             </p>
             <button
               onClick={reset}
-              className="rounded-lg bg-primary px-6 py-3 text-white hover:bg-primary/90"
+              className="bg-primary hover:bg-primary/90 rounded-lg px-6 py-3 text-white"
             >
               Try again
             </button>

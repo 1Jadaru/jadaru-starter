@@ -2,12 +2,12 @@ import { defineConfig, devices } from "@playwright/test";
 
 /**
  * Playwright E2E Test Configuration
- * 
+ *
  * Run tests:
  *   npm run test:e2e        # Run all E2E tests
  *   npm run test:e2e:ui     # Run with UI mode
  *   npm run test:e2e:debug  # Run with debugger
- * 
+ *
  * See https://playwright.dev/docs/test-configuration
  */
 export default defineConfig({
@@ -27,10 +27,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
 
   // Reporter configuration
-  reporter: [
-    ["html", { open: "never" }],
-    ["list"],
-  ],
+  reporter: [["html", { open: "never" }], ["list"]],
 
   // Shared settings for all tests
   use: {
