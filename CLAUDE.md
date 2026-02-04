@@ -508,7 +508,17 @@ export default function LoginPage() {
 
 ### Tailwind CSS v4 Changes
 
-Tailwind v4 has breaking changes with `@apply`:
+**CRITICAL: `tailwind.config.ts` is IGNORED by default in Tailwind v4.**
+You MUST add `@config` to `globals.css` or all custom color utilities (`bg-background`, `bg-card`, `text-foreground`, etc.) will be silently missing:
+
+```css
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+```
+
+Without this, components render with transparent backgrounds — no errors, no warnings.
+
+Tailwind v4 also has breaking changes with `@apply`:
 
 ```css
 /* ❌ May fail in Tailwind v4 */
@@ -717,3 +727,26 @@ For bug fixes, small features, or clear-scope work without full planning:
 ---
 
 _Remember: The goal is not impressive code — it's durable code._
+
+## NextAuth v5 + Vercel Gotchas
+
+### Middleware Size Limit (1MB Edge)
+- **DO NOT** use `auth()` as middleware — it imports Prisma/bcrypt, exceeds 1MB
+- **DO NOT** use `getToken()` from `next-auth/jwt` — can't decode v5 encrypted JWE tokens
+- **DO** use lightweight cookie-check middleware: `req.cookies.has("__Secure-authjs.session-token")`
+- Real auth validation happens in server components/API routes via `auth()`
+
+### Login Form
+- **DO NOT** use `fetch` with `redirect: "manual"` — browser won't process Set-Cookie headers
+- **DO** use native HTML form POST to `/api/auth/callback/credentials` with hidden CSRF token
+- Fetch CSRF token via `useEffect`, let browser handle form submit + redirect natively
+
+## Mobile Responsive Standards
+- **Mobile-first CSS** — design for mobile, enhance for desktop
+- **No horizontal scroll** — all content fits viewport at 320px
+- **Touch targets** — minimum 44×44px for all interactive elements
+- **Breakpoints:** mobile (default) → sm (640px) → md (768px) → lg (1024px)
+- **Navigation:** sidebar collapses to hamburger/drawer below md
+- **Tables:** convert to stacked cards on mobile
+- **Forms:** full-width inputs, stacked labels, full-width submit on mobile
+- **Typography:** 16px min body, scale headings down on mobile
